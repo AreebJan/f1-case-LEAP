@@ -29,6 +29,4 @@ qualifying_pairs as (
         and d.driver_id != t.driver_id
 )
 
-
-
 select * from qualifying_pairs
