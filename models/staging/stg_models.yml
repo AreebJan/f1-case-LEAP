@@ -1,0 +1,93 @@
+version: 2
+
+models:
+  - name: stg_results
+    description: "One row per driver per race, cleaned from the raw results table."
+    columns:
+      - name: result_id
+        description: "Primary key."
+        data_tests:
+          - unique
+          - not_null
+      - name: race_id
+        description: "The race this result belongs to."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_races')
+                field: race_id
+      - name: driver_id
+        description: "The driver."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_drivers')
+                field: driver_id
+      - name: constructor_id
+        description: "The team the driver raced for."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_constructors')
+                field: constructor_id
+      - name: status_id
+        description: "How the driver's race ended."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_status')
+                field: status_id
+      - name: starting_position
+        description: "Grid position. Null when the driver did not start from a grid slot (raw value 0)."
+
+  - name: stg_races
+    description: "One row per race, with season, race number and date."
+    columns:
+      - name: race_id
+        description: "Primary key."
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_drivers
+    description: "One row per driver, with a full name built from first and last name."
+    columns:
+      - name: driver_id
+        description: "Primary key."
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_constructors
+    description: "One row per team (constructor)."
+    columns:
+      - name: constructor_id
+        description: "Primary key."
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_qualifying
+    description: "One row per driver per qualifying session. Lap times converted from text to seconds."
+    columns:
+      - name: qualify_id
+        description: "Primary key."
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_status
+    description: "Lookup of race outcomes (Finished, Engine, Collision, etc.)."
+    columns:
+      - name: status_id
+        description: "Primary key."
+        data_tests:
+          - unique
+          - not_null
+
+
+  

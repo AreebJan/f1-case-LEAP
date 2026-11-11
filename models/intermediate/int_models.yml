@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: int_teammate_pairs
+    description: "description of the teammates per team (constructor)"
+    
+  - name: int_qualifying_pairs
+    description: "description of which teammate performed better"
+
+  - name: int_results_classified
+    description: "results of each race classified"
+    columns:
+      - name: status_category
+        description: "category of status (mechanical, engine failure, etc.)"
+        data_tests:
+          - not_null 
+          - accepted_values:
+              values: ['finished', 'lapped', 'mechanical', 'driver_incident', 'other', 'unknown']
