@@ -6,13 +6,6 @@ sources:
     database: f1
     schema: raw
     tables:
-      - name: circuits
-        description: "One row per circuit: name, location, country, coordinates and altitude"
-        columns:
-          - name: circuitId
-            data_tests:
-              - unique
-              - not_null
 
       - name: constructors
         description: "One row per team (constructor) that has entered a race"
@@ -61,9 +54,3 @@ sources:
             data_tests:
               - unique
               - not_null
-
-      - name: lap_times
-        description: "One row per driver per lap (1996 onwards)"
-
-      - name: pit_stops
-        description: "One row per pit stop (2011 onwards)"
