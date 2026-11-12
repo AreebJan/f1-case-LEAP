@@ -2,7 +2,7 @@ version: 2
 
 seeds:
   - name: status_categories
-    description: "Maps all 138 result statuses to one of six categories: finished, lapped, mechanical, driver_incident, other or unknown. Hand-made; see the README for the judgment calls."
+    description: "Maps all 139 result statuses to one of six categories: finished, lapped, mechanical, driver_incident, other or unknown. Hand-made; see the README for the judgment calls."
     columns:
       - name: status_id
         description: "Status ID, same as in stg_status."
