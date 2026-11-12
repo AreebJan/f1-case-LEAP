@@ -4,7 +4,7 @@ A dbt project on Snowflake, built as a case study for LEAP.
 
 ## The question
 
-In Formula 1 the car matters so much that it is hard to tell how good a driver really is. The one fair comparison is the teammate: two drivers, same team, same car.
+In Formula 1 the car matters so much that it is hard to tell how good a driver really is. The one fair comparison is the teammate: two drivers, same team, assuming same car.
 
 **Main question:** How does each driver do against their teammate, in qualifying and in races?
 
