@@ -1,17 +1,16 @@
 with
 
-source as (
+drivers as (
     select * from {{ ref('stg_drivers') }}
 ),
 
-driver_info as (
-    select 
-    driver_id,
-    full_name,
-    driver_code,
-    driver_nationality
-    
-    from source
-
+final as (
+    select
+        driver_id,
+        full_name,
+        driver_code,
+        driver_nationality
+    from drivers
 )
-select * from driver_info
+
+select * from final

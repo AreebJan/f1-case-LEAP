@@ -1,16 +1,15 @@
 with
 
-source as (
+constructors as (
     select * from {{ ref('stg_constructors') }}
 ),
 
-constructor_info as (
-    select 
-    constructor_id,
-    constructor_name,
-    constructor_nationality
-    
-    from source
-
+final as (
+    select
+        constructor_id,
+        constructor_name,
+        constructor_nationality
+    from constructors
 )
-select * from constructor_info
+
+select * from final
