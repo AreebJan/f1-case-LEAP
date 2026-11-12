@@ -1,0 +1,56 @@
+version: 2
+
+sources:
+  - name: f1
+    description: "Formula 1 data 1950-2024, loaded from CSV"
+    database: f1
+    schema: raw
+    tables:
+
+      - name: constructors
+        description: "One row per team (constructor) that has entered a race"
+        columns:
+          - name: constructorId
+            data_tests:
+              - unique
+              - not_null
+
+      - name: drivers
+        description: "One row per driver"
+        columns:
+          - name: driverId
+            data_tests:
+              - unique
+              - not_null
+
+      - name: races
+        description: "One row per race: season, round, circuit and date"
+        columns:
+          - name: raceId
+            data_tests:
+              - unique
+              - not_null
+
+      - name: results
+        description: "One row per driver per race: grid, finishing position, points, status"
+        columns:
+          - name: resultId
+            data_tests:
+              - unique
+              - not_null
+
+      - name: qualifying
+        description: "One row per driver per qualifying session, with Q1/Q2/Q3 times"
+        columns:
+          - name: qualifyId
+            data_tests:
+              - unique
+              - not_null
+
+      - name: status
+        description: "Lookup of finishing / retirement reasons"
+        columns:
+          - name: statusId
+            data_tests:
+              - unique
+              - not_null

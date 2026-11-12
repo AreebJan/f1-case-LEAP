@@ -1,0 +1,90 @@
+version: 2
+
+models:
+  - name: stg_results
+    description: "Every driver's result in every race. Same data as the raw table, with clearer column names."
+    columns:
+      - name: result_id
+        description: "Unique ID for one driver's result in one race."
+        data_tests:
+          - unique
+          - not_null
+      - name: race_id
+        description: "Which race this result is from."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_races')
+                field: race_id
+      - name: driver_id
+        description: "Which driver."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_drivers')
+                field: driver_id
+      - name: constructor_id
+        description: "Which team the driver was racing for."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_constructors')
+                field: constructor_id
+      - name: status_id
+        description: "How the driver's race ended, as a code. Look it up in stg_status."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_status')
+                field: status_id
+      - name: starting_position
+        description: "Where the driver started on the grid. Empty if they didn't start from a grid slot, for example a pit lane start (0 in the raw data)."
+
+  - name: stg_races
+    description: "Every race, with its season, its number in the season, and the date."
+    columns:
+      - name: race_id
+        description: "Unique ID for a race."
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_drivers
+    description: "Every driver. Adds a full name made from first and last name."
+    columns:
+      - name: driver_id
+        description: "Unique ID for a driver."
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_constructors
+    description: "Every team. F1 calls teams constructors."
+    columns:
+      - name: constructor_id
+        description: "Unique ID for a team."
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_qualifying
+    description: "Every driver's qualifying result for every race. Lap times are turned from text like 1:26.572 into seconds."
+    columns:
+      - name: qualify_id
+        description: "Unique ID for one driver's qualifying result."
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_status
+    description: "The list of ways a race can end for a driver, like Finished, Engine or Collision."
+    columns:
+      - name: status_id
+        description: "Unique ID for a status."
+        data_tests:
+          - unique
+          - not_null
