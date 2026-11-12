@@ -17,7 +17,6 @@ aggregated as (
         count_if(driver_1_qualified_ahead)                        as qualifying_ahead_of_teammate,
         median(qualifying_gap_pct)                                as median_qualifying_gap_pct
     from teammate_races
-    where season >= 2011
     group by season, constructor_id, driver_1_id, driver_2_id
 )
 

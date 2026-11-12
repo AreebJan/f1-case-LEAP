@@ -1,0 +1,122 @@
+models:
+  - name: mart_team_reliability
+    description: "How often each team's cars broke down, per season."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - season
+              - constructor_id
+    columns:
+      - name: mechanical_retirement_rate
+        description: "Share of the team's car starts that ended with a mechanical failure."
+        data_tests:
+          - not_null
+
+  - name: mart_teammate_head_2_head
+    description: "One row per pair of teammates per season, seen from driver 1's side. Shows how often driver 1 beat driver 2 in qualifying and in races."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - season
+              - constructor_id
+              - driver_1_id
+              - driver_2_id
+    columns:
+      - name: season
+        description: "The championship year."
+        data_tests:
+          - not_null
+
+      - name: constructor_id
+        description: "The team both drivers raced for."
+        data_tests:
+          - not_null
+
+      - name: driver_1_id
+        description: "Driver 1, the driver this row is about."
+        data_tests:
+          - not_null
+
+      - name: driver_2_id
+        description: "Driver 2, the teammate driver 1 is compared against."
+        data_tests:
+          - not_null
+
+      - name: comparable_races
+        description: "Number of races where both drivers reached the finish, so the result is a fair comparison."
+
+      - name: races_ahead_of_teammate
+        description: "Number of comparable races where driver 1 finished ahead of driver 2."
+
+      - name: qualifying_ahead_of_teammate
+        description: "Number of qualifying sessions where driver 1 qualified ahead of driver 2."
+
+      - name: median_qualifying_gap_pct
+        description: "Typical qualifying lap time gap between driver 1 and driver 2, in percent. Negative means driver 1 was faster."
+  
+  - name: fct_teammate_races
+    description: "One row per pair of teammates per race, seen from driver 1's side. Shows who qualified ahead and who finished ahead. Covers 2011 onward."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - race_id
+              - driver_1_id
+              - driver_2_id
+    columns:
+      - name: race_id
+        description: "The race."
+        data_tests:
+          - not_null
+
+      - name: driver_1_id
+        description: "Driver 1, the driver this row is about."
+        data_tests:
+          - not_null
+
+      - name: driver_2_id
+        description: "Driver 2, the teammate driver 1 is compared against."
+        data_tests:
+          - not_null
+
+      - name: is_comparable_race
+        description: "True when both drivers reached the finish, so the result is a fair comparison."
+
+      - name: driver_1_finished_ahead
+        description: "True when driver 1 finished the race ahead of driver 2."
+
+      - name: driver_1_qualified_ahead
+        description: "True when driver 1 qualified ahead of driver 2. Empty when there is no qualifying data for the pair."
+
+      - name: qualifying_gap_pct
+        description: "Qualifying lap time gap between driver 1 and driver 2, in percent, from the last session both took part in. Negative means driver 1 was faster."
+
+
+  - name: dim_drivers
+    description: "One row per driver, with name, code and nationality."
+    columns:
+      - name: driver_id
+        description: "Unique ID for the driver."
+        data_tests:
+          - unique
+          - not_null
+
+  - name: dim_constructors
+    description: "One row per team, with name and nationality."
+    columns:
+      - name: constructor_id
+        description: "Unique ID for the team."
+        data_tests:
+          - unique
+          - not_null
+
+  - name: dim_races
+    description: "One row per race, with name and season."
+    columns:
+      - name: race_id
+        description: "Unique ID for the race."
+        data_tests:
+          - unique
+          - not_null
