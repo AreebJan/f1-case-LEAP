@@ -57,7 +57,7 @@ joined as (
         and race_pairs.race_id = qualifying_compared.race_id
     join races
         on race_pairs.race_id = races.race_id
-    where races.season >= 2011
+    where races.season >= {{ var('start_season') }}
 )
 
 select * from joined

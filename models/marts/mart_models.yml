@@ -1,17 +1,48 @@
+version: 2
+
 models:
-  - name: mart_team_reliability
-    description: "How often each team's cars broke down, per season."
+  - name: fct_teammate_races
+    description: "One row per pair of teammates per race, seen from driver 1's side. Shows who qualified ahead and who finished ahead. Covers 2011 onward."
     data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
-              - season
-              - constructor_id
+              - race_id
+              - driver_1_id
+              - driver_2_id
     columns:
-      - name: mechanical_retirement_rate
-        description: "Share of the team's car starts that ended with a mechanical failure."
+      - name: season
+        description: "The championship year."
         data_tests:
           - not_null
+      - name: race_id
+        description: "The race."
+        data_tests:
+          - not_null
+      - name: constructor_id
+        description: "The team both drivers raced for."
+        data_tests:
+          - not_null
+      - name: driver_1_id
+        description: "Driver 1, the driver this row is about."
+        data_tests:
+          - not_null
+      - name: driver_2_id
+        description: "Driver 2, the teammate driver 1 is compared against."
+        data_tests:
+          - not_null
+      - name: driver_1_final_rank
+        description: "Driver 1's place in the race order, including drivers who did not finish."
+      - name: driver_2_final_rank
+        description: "Driver 2's place in the race order, including drivers who did not finish."
+      - name: is_comparable_race
+        description: "True when both drivers reached the finish, so the result is a fair comparison."
+      - name: driver_1_finished_ahead
+        description: "True when driver 1 ranked ahead of driver 2. Only meaningful together with is_comparable_race."
+      - name: driver_1_qualified_ahead
+        description: "True when driver 1 qualified ahead of driver 2. Empty when there is no qualifying data for the pair."
+      - name: qualifying_gap_pct
+        description: "Qualifying lap time gap between driver 1 and driver 2, in percent, from the last session both took part in. Negative means driver 1 was faster."
 
   - name: mart_teammate_head_2_head
     description: "One row per pair of teammates per season, seen from driver 1's side. Shows how often driver 1 beat driver 2 in qualifying and in races."
@@ -28,71 +59,56 @@ models:
         description: "The championship year."
         data_tests:
           - not_null
-
       - name: constructor_id
         description: "The team both drivers raced for."
         data_tests:
           - not_null
-
       - name: driver_1_id
         description: "Driver 1, the driver this row is about."
         data_tests:
           - not_null
-
       - name: driver_2_id
         description: "Driver 2, the teammate driver 1 is compared against."
         data_tests:
           - not_null
-
+      - name: races_together
+        description: "Number of races both drivers entered for the team."
       - name: comparable_races
         description: "Number of races where both drivers reached the finish, so the result is a fair comparison."
-
       - name: races_ahead_of_teammate
         description: "Number of comparable races where driver 1 finished ahead of driver 2."
-
+      - name: qualifying_sessions_together
+        description: "Number of qualifying sessions with data for both drivers."
       - name: qualifying_ahead_of_teammate
         description: "Number of qualifying sessions where driver 1 qualified ahead of driver 2."
-
       - name: median_qualifying_gap_pct
         description: "Typical qualifying lap time gap between driver 1 and driver 2, in percent. Negative means driver 1 was faster."
-  
-  - name: fct_teammate_races
-    description: "One row per pair of teammates per race, seen from driver 1's side. Shows who qualified ahead and who finished ahead. Covers 2011 onward."
+
+  - name: mart_team_reliability
+    description: "How often each team's cars broke down, per season. Covers 2011 onward."
     data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
-              - race_id
-              - driver_1_id
-              - driver_2_id
+              - season
+              - constructor_id
     columns:
-      - name: race_id
-        description: "The race."
+      - name: season
+        description: "The championship year."
         data_tests:
           - not_null
-
-      - name: driver_1_id
-        description: "Driver 1, the driver this row is about."
+      - name: constructor_id
+        description: "The team."
         data_tests:
           - not_null
-
-      - name: driver_2_id
-        description: "Driver 2, the teammate driver 1 is compared against."
+      - name: race_entries
+        description: "Number of car entries for the team that season (two cars per race)."
+      - name: mechanical_retirements
+        description: "Number of entries that ended with a mechanical failure."
+      - name: mechanical_retirement_rate
+        description: "Share of the team's race entries that ended with a mechanical failure. Entries include the few cars that did not qualify or withdrew."
         data_tests:
           - not_null
-
-      - name: is_comparable_race
-        description: "True when both drivers reached the finish, so the result is a fair comparison."
-
-      - name: driver_1_finished_ahead
-        description: "True when driver 1 finished the race ahead of driver 2."
-
-      - name: driver_1_qualified_ahead
-        description: "True when driver 1 qualified ahead of driver 2. Empty when there is no qualifying data for the pair."
-
-      - name: qualifying_gap_pct
-        description: "Qualifying lap time gap between driver 1 and driver 2, in percent, from the last session both took part in. Negative means driver 1 was faster."
-
 
   - name: dim_drivers
     description: "One row per driver, with name, code and nationality."

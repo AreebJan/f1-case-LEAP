@@ -1,34 +1,30 @@
-with 
+with
 
 results as (
-    select * from {{ref('int_results_classified')}}
-
+    select * from {{ ref('int_results_classified') }}
 ),
 
 teammate_pairs as (
     select
-        d.race_id,
-        d.constructor_id,
-        d.driver_id as driver_1_id,
-        d.final_position as driver_1_final_position,
-        d.status_id as driver_1_status_id,
-        d.final_rank as driver_1_final_rank,
-        d.is_classified_finish as driver_1_is_classified_finish,
+        driver.race_id,
+        driver.constructor_id,
 
-        t.driver_id as driver_2_id,
-        t.final_position as driver_2_final_position,
-        t.status_id as driver_2_status_id,
-        t.final_rank as driver_2_final_rank,
-        t.is_classified_finish as driver_2_is_classified_finish
+        driver.driver_id as driver_1_id,
+        driver.final_position as driver_1_final_position,
+        driver.status_id as driver_1_status_id,
+        driver.final_rank as driver_1_final_rank,
+        driver.is_classified_finish as driver_1_is_classified_finish,
 
-
-    from results as d
-    join results as t
-        on  d.race_id = t.race_id 
-        and d.constructor_id = t.constructor_id
-        and d.driver_id != t.driver_id
+        teammate.driver_id as driver_2_id,
+        teammate.final_position as driver_2_final_position,
+        teammate.status_id as driver_2_status_id,
+        teammate.final_rank as driver_2_final_rank,
+        teammate.is_classified_finish as driver_2_is_classified_finish
+    from results as driver
+    join results as teammate
+        on  driver.race_id = teammate.race_id
+        and driver.constructor_id = teammate.constructor_id
+        and driver.driver_id != teammate.driver_id
 )
-
-
 
 select * from teammate_pairs

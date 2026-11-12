@@ -1,24 +1,21 @@
-with 
+with
 
 results as (
-    select * from {{ref('stg_results')}}
-
+    select * from {{ ref('stg_results') }}
 ),
 
-categories_classified as (
-    select * from {{ref('status_categories')}}
+status_categories as (
+    select * from {{ ref('status_categories') }}
 ),
 
 results_classified as (
-    select results.*,
-    status_category,
-    status_category IN('finished', 'lapped') as is_classified_finish
-
+    select
+        results.*,
+        status_categories.status_category,
+        status_categories.status_category in ('finished', 'lapped') as is_classified_finish
     from results
-
-    LEFT JOIN categories_classified
-    on
-    results.status_id = categories_classified.status_id
+    left join status_categories
+        on results.status_id = status_categories.status_id
 )
 
 select * from results_classified

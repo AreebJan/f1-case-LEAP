@@ -1,18 +1,17 @@
 with
 
-source as (
+races as (
     select * from {{ ref('stg_races') }}
 ),
 
-races_info as (
-    select 
-    season,
-    race_id,
-    race_name,
-    race_date,
-    race_number_in_season
-    
-    from source
-
+final as (
+    select
+        race_id,
+        season,
+        race_name,
+        race_date,
+        race_number_in_season
+    from races
 )
-select * from races_info
+
+select * from final

@@ -84,7 +84,11 @@ models:
     description: "The list of ways a race can end for a driver, like Finished, Engine or Collision."
     columns:
       - name: status_id
-        description: "Unique ID for a status."
+        description: "Unique ID for a status. Every status must have a category in the status_categories seed."
         data_tests:
           - unique
           - not_null
+          - relationships:
+              arguments:
+                to: ref('status_categories')
+                field: status_id
