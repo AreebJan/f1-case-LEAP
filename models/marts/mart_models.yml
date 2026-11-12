@@ -1,3 +1,4 @@
+version: 2 
 models:
   - name: mart_team_reliability
     description: "How often each team's cars broke down, per season."
